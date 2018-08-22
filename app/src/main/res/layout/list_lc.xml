@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/div_white"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@mipmap/sector_1_title"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:text="任务序号："
+            android:layout_weight="1.5"
+            android:textColor="#666872" />
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:text=""
+            android:layout_weight="1.0"
+            android:textColor="#666872"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/boder">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text="经度集合："
+                android:layout_weight="1.5"
+                android:textColor="#666872" />
+            <TextView
+                android:id="@+id/jd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text=""
+                android:layout_weight="1.0"
+                android:textColor="#666872"/>
+
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_weight="1.5"
+                android:text="维度集合："
+                android:textColor="#666872" />
+            <TextView
+                android:id="@+id/wd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text=""
+                android:layout_weight="1.0"
+                android:textColor="#666872"/>
+
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_weight="1.5"
+                android:text="任务价格："
+                android:textColor="#63656e" />
+            <TextView
+                android:id="@+id/jg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text=""
+                android:layout_weight="1.0"
+                android:textColor="#666872"/>
+
+
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:layout_weight="1.5"
+                android:text="任务描述："
+                android:textColor="#666872" />
+            <TextView
+                android:id="@+id/ms"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text=""
+                android:layout_weight="1.0"
+                android:textColor="#666872"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#eef4f5"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/xx"
+            style="@style/text_15_ffffff_sdw"
+            android:layout_width="114.0dip"
+            android:layout_height="40.0dip"
+            android:background="@mipmap/message_unsent"
+            android:gravity="center"
+            android:text="详细位置" />
+
+        <Button
+            android:id="@+id/js"
+            style="@style/text_15_ffffff_sdw"
+            android:layout_width="114.0dip"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="20.0dip"
+            android:background="@mipmap/message_unsent"
+            android:gravity="center"
+            android:text="接受" />
+    </LinearLayout>
+    <View
+        android:id="@+id/div"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/div_white"/>
+</LinearLayout>
