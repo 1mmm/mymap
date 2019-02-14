@@ -9,11 +9,15 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_llsearch"
-        android:title="任务目录"
+        android:title="车位目录"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_sitesearch"
-        android:title="全部任务"
+        android:title="全部车位"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/menu_my"
+        android:title="我的车位"
+        app:showAsAction="never" />
 </menu>

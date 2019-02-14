@@ -29,7 +29,7 @@
         android:layout_height="45dp"
         android:layout_margin="2dp"
         android:gravity="center"
-        android:text="接受"
+        android:text="在此停车"
         android:layout_weight="1"
         android:textColor="#0000ff"
         android:textSize="18sp"

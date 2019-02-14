@@ -31,7 +31,7 @@ public class Main2Activity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static boolean yy;
     public  GestureDetector detector;
-    public String base_url="http://120.79.159.180/";
+    public String base_url="http://39.107.93.96/";
     private final OkHttpClient client = new OkHttpClient();
     public LinearLayout a;
     String tt="";
@@ -127,7 +127,7 @@ public class Main2Activity extends AppCompatActivity {
                             FormBody.Builder pa=new  FormBody.Builder();
                             pa.add("id",ans.getText().toString());
                             sh.save("username",ans.getText().toString());
-                            tt=post(pa,"login.php");
+                            tt=post(pa,"map_login.php");
                             hand.sendEmptyMessage(1111);
                             Gson gson = new Gson();
                             mla = gson.fromJson(tt,erro.class).mlt;

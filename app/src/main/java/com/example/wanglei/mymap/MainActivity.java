@@ -1,5 +1,6 @@
 package com.example.wanglei.mymap;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +37,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,10 +59,19 @@ import static com.example.wanglei.mymap.Main2Activity.user;
 
 public class MainActivity extends AppCompatActivity {
     private MapView myMapView = null;//地图控件
-    private double up=30.551,down=30.539,left=114.363,right=114.383;
+    private double up=30.59,down=30.5,left=114.3,right=114.383;
     private BaiduMap myBaiduMap;//百度地图对象
-    String tt="";
-
+    String tt="",cw="",rid="";
+    public class erro {
+        private String error;
+        private String id;
+        private String cw;
+        erro(String error,String id,String cw){
+            this.error = error;
+            this.id = id;
+            this.cw=cw;
+        }
+    }
     private View inflate;
     private TextView choosePhoto;
     private TextView ac,ca;
@@ -71,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private MylocationListener mylistener;//重写的监听类
     private Context context;
     public JSONArray qqq;
-    public String base_url="http://120.79.159.180/";
+    public String base_url="http://39.107.93.96/";
     private final OkHttpClient client = new OkHttpClient();
     static public double myLatitude;//纬度，用于存储自己所在位置的纬度
     static public double myLongitude;//经度，用于存储自己所在位置的经度
@@ -207,14 +218,17 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "在"+myLatitude+","+myLongitude+"成功接受任务"+Info.gettid(), Toast.LENGTH_LONG).show();
+                        Random rand=new Random();
+                        final int num=rand.nextInt(100);
+                        Toast.makeText(MainActivity.this, "成功在"+Info.gettid()+"号停车场预约"+num+"号停车位", Toast.LENGTH_LONG).show();
                         new Thread() {
                             public void run() {
                                 try{
                                     FormBody.Builder pa = new FormBody.Builder();
                                     pa.add("id",Info.gettid()+"");
-                                    pa.add("mla",myLongitude+"");
-                                    pa.add("mlt",myLatitude+"");
+                                    pa.add("pid",user+"");
+                                    pa.add("type",1+"");
+                                    pa.add("cw",num+"");
                                     post(pa, "ass.php");
                                 }catch (Exception e) {
                                 }
@@ -282,6 +296,62 @@ public class MainActivity extends AppCompatActivity {
             /*
              *第一个功能，返回自己所在的位置，箭头表示
              */
+            case R.id.menu_my:
+                new Thread() {
+                    public void run() {
+                        try {
+                            FormBody.Builder pa = new FormBody.Builder();
+                            pa.add("id",user+"");
+                            pa.add("type",3+"");
+                            tt = post(pa, "ass.php");
+                            Gson gson = new Gson();
+                            rid = gson.fromJson(tt,MainActivity.erro.class).id;
+                            cw=gson.fromJson(tt,MainActivity.erro.class).cw;
+
+                        } catch (Exception e) {
+                        }
+                    }
+                }.start();
+                delay(1000);
+                CustomDialog1.Builder builder1 = new CustomDialog1.Builder(MainActivity.this);
+                builder1.setTitle("车 位 管 理");
+                builder1.setcon("您在"+rid+"号停车场"+cw+"号车位有预约！\n");
+                builder1.setPositiveButton("进入车位", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog alertDialog2 = new AlertDialog.Builder(MainActivity.this) .setTitle("提示！") .setMessage("已为您开启车位！").setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) { dialogInterface.dismiss();  } }) .create();
+                        alertDialog2.show();
+                        dialog.dismiss();
+                        //设置你的操作事项
+                    }
+
+                });
+
+                builder1.setNegativeButton("离开车位",
+                        new android.content.DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                AlertDialog alertDialog2 = new AlertDialog.Builder(MainActivity.this) .setTitle("提示！") .setMessage("您已离开车位！").setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) { dialogInterface.dismiss();  } }) .create();
+                                alertDialog2.show();
+                                new Thread() {
+                                    public void run() {
+                                        try{
+                                            FormBody.Builder pa = new FormBody.Builder();
+                                            pa.add("pid",user+"");
+                                            pa.add("type",2+"");
+                                            pa.add("id",rid+"");
+                                            post(pa, "ass.php");
+                                        }catch (Exception e) {
+                                        }
+                                    }
+                                }.start();
+                                dialog.dismiss();
+                            }
+                        });
+                builder1.create().show();
+                break;
             case R.id.menu_item_mylocation://返回当前位置
                 changemyself();
                 break;
@@ -313,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });*/
                 CustomDialog.Builder builder = new CustomDialog.Builder(MainActivity.this);
-                builder.setTitle("任 务 目 录");
+                builder.setTitle("车 位 目 录");
                 new Thread() {
                     public void run() {
                         try {
@@ -345,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
                                         a11 = Float.parseFloat(a1[i]);
                                         a22 = Float.parseFloat(a2[i]);
                                         Log.d(a11 + " " + a22, "onClick: ");
-                                        makerInfo marker=new makerInfo(a11,a22,"taskid:"+i+h3+h4,i+"",h5);
+                                        makerInfo marker=new makerInfo(a11,a22,h5+"号停车场"+h3+h4,i+"",h5);
                                         addOverlay(marker);
                                     }
                                 }
@@ -388,26 +458,38 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     myBaiduMap.clear();
                     int tnum=0;
+                    float x[]=new float[50];
+                    float y[]=new float[50];
+                    float num[]=new float[50];
+                    float price[]=new float[50];
+                    float di[]=new float[50];
+                    String id[]=new String[50];
+                    String jg[]=new String[50];
+                    float dis=0;
                     for (int i = 0; i < qqq.length(); i++) {
                         JSONObject jo1 = qqq.getJSONObject(i);
                         {
-                            String[] a1=jo1.getString("jd").split(",");
-                            String[] a2=jo1.getString("wd").split(",");
-                            String a3=jo1.getString("personID");
-                            String a4="\nprice:"+jo1.getString("jg");
-                            String a5="\ndesc:"+jo1.getString("ms");
-                            float a11=Float.parseFloat(a1[0]);
-                            float a22=Float.parseFloat(a2[0]);
-                            getLocationByLL(a22,a11);
+                            String a1=jo1.getString("jd");
+                            String a2=jo1.getString("wd");
+                            id[i]=jo1.getString("personID");
+                            jg[i]=jo1.getString("jg");
+                            di[i]=(float)Math.sqrt(Math.pow(x[i]-myLongitude,2)+Math.pow(y[i]-myLatitude,2));
+                            if (di[i]>dis) dis=di[i];
+                            num[i]=Float.parseFloat(jo1.getString("ms"));
+                            x[i]=Float.parseFloat(a1);
+                            y[i]=Float.parseFloat(a2);
+                            getLocationByLL(y[i],x[i]);
+                        }
 
-                            for (int j=0;j<a1.length;j++) {
-                                a11 = Float.parseFloat(a1[j]);
-                                a22 = Float.parseFloat(a2[j]);
-                                Log.d(a11 + " " + a22, "onClick: ");
-                                makerInfo marker=new makerInfo(a11,a22,"taskid:"+tnum+a4+a5,tnum+"",a3);
-                                tnum=tnum+1;
-                                addOverlay(marker);
-                            }
+                        for (int j=0;j< qqq.length();j++) {
+                            float pri=0;
+                            if (num[i]<6) pri=9;
+                            if (num[i]>44) pri=2;
+                            if (num[i]>25 && num[i]<45) pri=(float)(3.5*((45-num[i])/4-di[i]/dis+1)/6+2);
+                            if (num[i]<=25 && num[i]>=6) pri=(float)(3.5*(25-num[i])/20+5.5);
+                            makerInfo marker=new makerInfo(x[i],y[i],id[i]+"号停车场\n价格："+pri+"元/小时\n剩余车位："+(int)num[i],tnum+"",id[i]);
+                            tnum=tnum+1;
+                            addOverlay(marker);
                         }
                     }}
                 catch (JSONException e) {
@@ -475,7 +557,6 @@ public class MainActivity extends AppCompatActivity {
 
         myLatitude = nextDouble(down,up);
         myLongitude = nextDouble(left,right);
-
         MyLocationData data = new MyLocationData.Builder()
                 .direction(myCurrentX)//设定图标方向
                 .accuracy(0.0f)//getRadius 获取定位精度,默认值0.0f
@@ -492,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                 pa.add("id",user);
                 pa.add("mla",myLongitude+"");
                 pa.add("mlt",myLatitude+"");
-                tt = post(pa, "registor.php");
+                tt = post(pa, "map_registor.php");
             }catch (Exception e) {
             }
             }

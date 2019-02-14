@@ -15,19 +15,19 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.example.wanglei.mymap.Main2Activity.user;
 import static com.example.wanglei.mymap.MainActivity.h1;
 import static com.example.wanglei.mymap.MainActivity.h2;
 import static com.example.wanglei.mymap.MainActivity.h3;
 import static com.example.wanglei.mymap.MainActivity.h4;
 import static com.example.wanglei.mymap.MainActivity.h5;
-import static com.example.wanglei.mymap.MainActivity.myLatitude;
-import static com.example.wanglei.mymap.MainActivity.myLongitude;
 
 /**
  * Created by 2mmm on 2017/9/14.
@@ -37,7 +37,7 @@ public class lcAdapter extends BaseAdapter {
     private LinkedList<lc> data;
     private LayoutInflater layoutInflater;
     private Context context;
-    public String base_url="http://120.79.159.180/";
+    public String base_url="http://39.107.93.96/";
     private final OkHttpClient client = new OkHttpClient();
 
     public lcAdapter(Context context,LinkedList<lc> data){
@@ -105,11 +105,10 @@ public class lcAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "成功选择任务"+data.get(position).getname()+"", Toast.LENGTH_LONG).show();
                 h1=data.get(position).getjd()+"";
                 h2=data.get(position).getwd()+"";
-                h3="\nprice:"+data.get(position).getjg()+"";
-                h4="\ndesc:"+data.get(position).getms()+"";
+                h3="\n价格:"+data.get(position).getjg()+"";
+                h4="\n剩余车位:"+data.get(position).getms()+"";
                 h5=data.get(position).getname()+"";
             }
         });
@@ -117,14 +116,17 @@ public class lcAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "在"+myLatitude+","+myLongitude+"成功接受任务"+data.get(position).getname()+"", Toast.LENGTH_LONG).show();
+                Random rand=new Random();
+                final int num=rand.nextInt(100);
+                Toast.makeText(context, "成功在"+data.get(position).getname()+"号停车场预约"+num+"号停车位", Toast.LENGTH_LONG).show();
                 new Thread() {
                     public void run() {
                         try{
                             FormBody.Builder pa = new FormBody.Builder();
                             pa.add("id",data.get(position).getname()+"");
-                            pa.add("mla",myLongitude+"");
-                            pa.add("mlt",myLatitude+"");
+                            pa.add("pid",user+"");
+                            pa.add("type",1+"");
+                            pa.add("cw",num+"");
                             post(pa, "ass.php");
                         }catch (Exception e) {
                         }
